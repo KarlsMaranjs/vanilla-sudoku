@@ -1,0 +1,40 @@
+body {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    background: beige;
+    overflow: hidden;
+}
+
+#board {
+    width: 54rem;
+    min-width: 54rem;
+    margin: auto;
+    text-align: center;
+    border-collapse: collapse;
+    border: solid 0.4rem black;
+    font: 3rem Arial, Helvetica, sans-serif;
+}
+
+.board-row {
+    height: 6rem;
+    border-bottom: solid 0.2rem rgb(100, 100, 100);
+}
+
+.board-row:nth-child(3n):not(:last-child) {
+    border-bottom: 0.4rem solid rgb(49, 49, 49);
+}
+
+.board-cell {
+    border-right: solid 0.2rem black
+}
+
+.board-cell:hover {
+    background: #319ccd;
+    color: white;
+    cursor: pointer
+}
+
+.board-cell:nth-child(3n):not(:last-child) {
+    border-right: solid 0.4rem rgb(49, 49, 49)
+}
