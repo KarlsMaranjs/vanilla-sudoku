@@ -19,7 +19,7 @@ export default class Cell {
      */
     constructor(cell) {
         this.parent = cell.parentNode;
-        this.index = Array.prototype.indexOf.call(this.parent.children, cell);
+        this.index = Array.from(this.parent.children).findIndex((element) => element === cell);
         this.siblings = new Siblings(this.parent, this.index);
     }
 }
