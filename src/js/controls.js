@@ -19,7 +19,6 @@ function selectCell(cell) {
     }
     const cellClass = new Cell(cell);
     console.log(cellClass);
-    document.getElementById('capture-focus').focus()
     return cell
 }
 
