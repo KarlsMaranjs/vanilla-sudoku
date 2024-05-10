@@ -19,7 +19,7 @@ function selectCell(cell) {
     }
     const cellClass = new Cell(cell);
     console.log(cellClass);
-
+    cell.focus()
     return cell
 }
 

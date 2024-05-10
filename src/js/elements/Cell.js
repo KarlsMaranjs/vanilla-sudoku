@@ -31,7 +31,7 @@ class Siblings {
     column;
 
     /**
-     * @type {HTMLCollection}
+     * @type {Element[]}
      */
     row
 
@@ -46,7 +46,9 @@ class Siblings {
     }
 
     colSiblings(parent, index) {
-        return this.findColSiblings(parent, index).reverse().concat(this.findColSiblings(parent, index, false))
+        return this.findColSiblings(parent, index)
+            .reverse()
+            .concat(this.findColSiblings(parent, index, false))
     }
 
     rowSiblings(parent, index) {
@@ -56,7 +58,7 @@ class Siblings {
     }
 
     /**
-     * @param parent {ParentNode}
+     * @param parent {ChildNode}
      * @param index {number}
      * @param backwards {boolean}
      */
@@ -67,7 +69,7 @@ class Siblings {
         /**
          * @type {ChildNode[]}
          */
-        let colSiblings= [];
+        let colSiblings = [];
 
         const columnSibling = parentSiblings.children[index];
         colSiblings.push(columnSibling);
