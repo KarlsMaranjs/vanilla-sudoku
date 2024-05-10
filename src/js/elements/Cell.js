@@ -10,11 +10,17 @@ export default class Cell {
     parent;
 
     /**
+     * @type number
+     */
+    index;
+
+    /**
      * @param cell {HTMLTableCellElement}
      */
     constructor(cell) {
         this.parent = cell.parentNode;
-        this.siblings = new Siblings(this.parent, 3);
+        this.index = Array.prototype.indexOf.call(this.parent.children, cell);
+        this.siblings = new Siblings(this.parent, this.index);
     }
 }
 
