@@ -1,3 +1,5 @@
+import { EMPTY_CELL } from "./constants.js";
+
 /**
  * @description Generates a random number in the interval delimited by `min` and `max` inclusively
  * @param min {number}
@@ -11,7 +13,7 @@ function randomInt(min, max) {
 /**
  * @param length {number} The length of the grid (number of rows/columns).
  * @param generator {(a: number, b: number) => number} A function that generates the values for the grid cells.
- * @returns {number[][]} Returns a 2D array representing the generated grid.
+ * @returns {number[][]} 2D array representing the generated grid.
  */
 function generateGrid(length, generator) {
     return Array.from({ length: length }, () =>
@@ -25,8 +27,8 @@ function generateGrid(length, generator) {
  */
 function cell(number) {
     return `<td class="board-cell">
-                <span>
-                    ${number === 0 ? '&#8199;' : number}
+                <span class="board-cell-value">
+                    ${number === 0 ? EMPTY_CELL : number}
                 </span>
             </td>`
     ;

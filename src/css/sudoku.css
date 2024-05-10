@@ -35,6 +35,14 @@ body {
     cursor: pointer
 }
 
+.board-cell:active {
+    background: brown;
+}
+
+.board-cell-selected {
+    background: chartreuse;
+}
+
 .board-cell:nth-child(3n):not(:last-child) {
     border-right: solid 0.4rem rgb(49, 49, 49)
 }
