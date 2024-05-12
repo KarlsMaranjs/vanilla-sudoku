@@ -1,4 +1,3 @@
-import { SELECTED_CELL_CLASS } from "./constants.js";
 import Cell from "./elements/Cell.js";
 import Board from "./elements/Board.js";
 
@@ -12,8 +11,7 @@ function selectCell(cell, board) {
     if (cell.selected) {
         board.activeCell = null;
     } else {
-        const selectedCell = board.activeCell;
-        if (selectedCell) selectedCell.selected = false
+        if (board.activeCell) board.activeCell.selected = false
         board.activeCell = cell;
     }
 
