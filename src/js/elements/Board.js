@@ -1,3 +1,5 @@
+import Cell from "./Cell.js";
+
 export default class Board {
 
     /**
@@ -11,11 +13,20 @@ export default class Board {
     _activeCell;
 
     /**
-     * @param cells {Cell[]}
+     * @param board {HTMLTableElement}
      */
-    constructor(cells) {
-        this.cells = cells;
+    constructor(board) {
+        this.board = board;
+        this.cells = this.initCells();
         this._activeCell = null;
+    }
+
+    /**
+     * @return {Cell[]}
+     */
+    initCells() {
+        const cells = this.board.getElementsByTagName('td')
+        return Array.from(cells).map(cell => new Cell(cell));
     }
 
     /**

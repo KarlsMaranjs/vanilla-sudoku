@@ -17,6 +17,7 @@ export default class Siblings {
     next;
     previous;
 
+    // TODO Siblings should be of type Cell
     constructor(parent, index) {
         this.row = this.rowSiblings(parent, index);
         this.column = this.colSiblings(parent, index);

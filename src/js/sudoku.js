@@ -1,4 +1,6 @@
 import { EMPTY_CELL } from "./constants.js";
+import Board from "./elements/Board.js";
+import { initControls } from "./controls.js";
 
 /**
  * @description Generates a random number in the interval delimited by `min` and `max` inclusively
@@ -48,14 +50,18 @@ function row(values) {
  * @param grid {number[][]}
  * @returns {string}
  */
-function board(grid){
+function printBoard(grid){
     return grid.map(row).join('');
 }
 
 function sudoku() {
     let sudoku = document.getElementById('board');
     const grid = generateGrid(9, randomInt);
-    sudoku.innerHTML = board(grid);
+    sudoku.innerHTML = printBoard(grid);
+
+    const board = new Board(document.getElementById('board'));
+    initControls(board)
+
 }
 
 sudoku();

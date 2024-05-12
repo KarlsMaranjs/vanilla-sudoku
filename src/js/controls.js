@@ -67,12 +67,11 @@ function validateNumericKey(key) {
     return null
 }
 
-function initControls() {
-    const cells = Array.from(
-        document.getElementsByClassName('board-cell')).map(cell => new Cell(cell)
-    );
-
-    const board = new Board(cells);
+/**
+ *
+ * @param board {Board}
+ */
+export function initControls(board) {
 
     board.cells.forEach((cell) => {
         cell.element.addEventListener('click', () => selectCell(cell, board));
@@ -80,5 +79,3 @@ function initControls() {
 
     document.addEventListener('keyup', (e) => updateCellValue(e.key, board))
 }
-
-initControls();
