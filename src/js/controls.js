@@ -24,18 +24,33 @@ function selectCell(cell, board) {
  */
 function updateCellValue(key, board) {
 
+    const selectedCell = board.activeCell;
+    if (!selectedCell) return
+
     let value;
 
-    if (key === 'Backspace' || key === 'Delete' || key === ' ') {
-        value = 0;
-    } else {
-        value = validateNumericKey(key)
-        if (isNaN(value) || value === null) return
+    switch (key) {
+        case 'Backspace':
+        case 'Delete':
+        case ' ':
+            value = 0;
+            break;
+        case 'ArrowUp':
+            break;
+        case 'ArrowDown':
+            break;
+        case 'ArrowRight':
+            selectCell(selectedCell.siblings.previous.row, board)
+            break;
+        case 'ArrowLeft':
+            selectCell(selectedCell.siblings.next.row, board)
+            break;
+        default:
+            value = validateNumericKey(key)
+            if (isNaN(value) || value === null) return
+            break
     }
 
-    const selectedCell = board.activeCell;
-
-    if (!selectedCell) return
 
     selectedCell.value = value;
 }

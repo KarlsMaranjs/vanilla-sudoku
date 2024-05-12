@@ -14,9 +14,19 @@ export default class Siblings {
      */
     block;
 
+    next;
+    previous;
+
     constructor(parent, index) {
         this.row = this.rowSiblings(parent, index);
         this.column = this.colSiblings(parent, index);
+
+        this.next = {
+            row: this.row[index],
+        }
+        this.previous = {
+            row: this.row[index - 1],
+        }
     }
 
     colSiblings(parent, index) {

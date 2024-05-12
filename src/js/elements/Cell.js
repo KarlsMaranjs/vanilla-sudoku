@@ -1,5 +1,7 @@
 import { EMPTY_CELL, SELECTED_CELL_CLASS } from "../constants.js";
 import Siblings from "./Siblings.js";
+
+
 export default class Cell {
 
     /**
@@ -48,14 +50,14 @@ export default class Cell {
     /**
      * @param selected {boolean}
      */
-    set selected(selected){
+    set selected(selected) {
         selected
             ? this.element.classList.add(SELECTED_CELL_CLASS)
             : this.element.classList.remove(SELECTED_CELL_CLASS);
         this._selected = selected;
     }
 
-    get selected(){
+    get selected() {
         return this._selected;
     }
 }
