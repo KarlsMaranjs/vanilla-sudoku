@@ -1,5 +1,3 @@
-import Cell from "./Cell.js";
-
 export default class Board {
 
     /**
@@ -20,8 +18,12 @@ export default class Board {
         this._activeCell = null;
     }
 
+    /**
+     * @param cell {Cell}
+     */
     set activeCell(cell) {
         this._activeCell = cell;
+        cell.selected = this._activeCell !== null;
     }
 
     /**

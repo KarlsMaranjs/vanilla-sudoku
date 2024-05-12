@@ -1,4 +1,4 @@
-import { EMPTY_CELL, SELECTED_CELL_CLASS } from "./constants.js";
+import { SELECTED_CELL_CLASS } from "./constants.js";
 import Cell from "./elements/Cell.js";
 import Board from "./elements/Board.js";
 
@@ -8,15 +8,12 @@ import Board from "./elements/Board.js";
  * @return Cell
  */
 function selectCell(cell, board) {
-    const selectedCell = board.activeCell;
-    const classList = cell.element.classList;
 
-    if (classList.contains(SELECTED_CELL_CLASS)) {
-        classList.remove(SELECTED_CELL_CLASS)
+    if (cell.selected) {
         board.activeCell = null;
     } else {
-        if (selectedCell) selectedCell.element.classList.remove(SELECTED_CELL_CLASS)
-        classList.add(SELECTED_CELL_CLASS);
+        const selectedCell = board.activeCell;
+        if (selectedCell) selectedCell.selected = false
         board.activeCell = cell;
     }
 
