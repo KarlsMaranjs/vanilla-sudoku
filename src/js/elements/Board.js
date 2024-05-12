@@ -22,8 +22,13 @@ export default class Board {
      * @param cell {Cell}
      */
     set activeCell(cell) {
+        if (cell === null) {
+            this._activeCell.selected = false;
+        } else {
+            cell.selected = true;
+        }
+
         this._activeCell = cell;
-        cell.selected = this._activeCell !== null;
     }
 
     /**
