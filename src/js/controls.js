@@ -1,46 +1,48 @@
 import { EMPTY_CELL, SELECTED_CELL_CLASS } from "./constants.js";
 import Cell from "./elements/Cell.js";
+import Board from "./elements/Board.js";
 
 /**
- * @param cell {HTMLTableCellElement}
- * @return HTMLTableCellElement
+ * @param cell {Cell}
+ * @param board {Board}
+ * @return Cell
  */
-function selectCell(cell) {
-    const selectedCells = document.getElementsByClassName(SELECTED_CELL_CLASS);
-    const classList = cell.classList;
+function selectCell(cell, board) {
+    const selectedCell = board.activeCell;
+    const classList = cell.element.classList;
 
     if (classList.contains(SELECTED_CELL_CLASS)) {
         classList.remove(SELECTED_CELL_CLASS)
-    }
-    else {
-        const currentlySelected = Array.from(selectedCells).find(cell => cell.classList.contains(SELECTED_CELL_CLASS))
-        if (currentlySelected) currentlySelected.classList.remove(SELECTED_CELL_CLASS)
+        board.activeCell = null;
+    } else {
+        if (selectedCell) selectedCell.element.classList.remove(SELECTED_CELL_CLASS)
         classList.add(SELECTED_CELL_CLASS);
+        board.activeCell = cell;
     }
-    const cellClass = new Cell(cell);
-    console.log(cellClass);
+
     return cell
 }
 
 /**
  * @param key {string}
+ * @param board {Board}
  */
-function updateCellValue(key) {
+function updateCellValue(key, board) {
 
     let value;
 
     if (key === 'Backspace' || key === 'Delete' || key === ' ') {
-        value = -1;
+        value = 0;
     } else {
         value = validateNumericKey(key)
         if (isNaN(value) || value === null) return
     }
 
-    const selectedCell = document.getElementsByClassName(SELECTED_CELL_CLASS)[0];
+    const selectedCell = board.activeCell;
 
     if (!selectedCell) return
 
-    selectedCell.querySelector('span.board-cell-value').innerHTML = value >= 0 ? value : EMPTY_CELL;
+    selectedCell.value = value;
 }
 
 /**
@@ -56,14 +58,17 @@ function validateNumericKey(key) {
 }
 
 function initControls() {
-    const cells = document.getElementsByClassName('board-cell');
+    const cells = Array.from(
+        document.getElementsByClassName('board-cell')).map(cell => new Cell(cell)
+    );
 
-    for (let i = 0; i < cells.length; i++) {
-        const cell = cells[i];
-        cell.addEventListener('click', () => selectCell(cell));
-    }
+    const board = new Board(cells);
 
-    document.addEventListener('keyup', (e) => updateCellValue(e.key))
+    board.cells.forEach((cell) => {
+        cell.element.addEventListener('click', () => selectCell(cell, board));
+    })
+
+    document.addEventListener('keyup', (e) => updateCellValue(e.key, board))
 }
 
 initControls();

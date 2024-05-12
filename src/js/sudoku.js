@@ -17,7 +17,7 @@ function randomInt(min, max) {
  */
 function generateGrid(length, generator) {
     return Array.from({ length: length }, () =>
-        Array.from({ length: length }, () => generator(0, 9))
+        Array.from({ length: length }, () => generator(0, 0))
     );
 }
 

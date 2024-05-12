@@ -1,26 +1,43 @@
+import { EMPTY_CELL } from "../constants.js";
+
 export default class Cell {
+
     /**
      * @type {Siblings}
      */
     siblings;
 
     /**
-     * @type {ParentNode}
-     */
-    parent;
-
-    /**
      * @type number
+     * @description Represents the numeric index, starting from zero, for the current element
+     * relative to the list of children in the parent
      */
     index;
+
+    /**
+     * @type HTMLTableCellElement
+     */
+    element;
+
+    /**
+     * @type {HTMLSpanElement}
+     */
+    #valueHolder;
 
     /**
      * @param cell {HTMLTableCellElement}
      */
     constructor(cell) {
-        this.parent = cell.parentNode;
-        this.index = Array.from(this.parent.children).findIndex((element) => element === cell);
-        this.siblings = new Siblings(this.parent, this.index);
+        this.element = cell;
+        this._value = 0;
+        this.index = Array.from(this.element.parentNode.children).findIndex((element) => element === cell);
+        this.siblings = new Siblings(this.element.parentNode, this.index);
+        this.#valueHolder = cell.querySelector('span.board-cell-value')
+    }
+
+    set value(number) {
+        this.#valueHolder.innerHTML = number >= 0 ? number : EMPTY_CELL;
+        this._value = number;
     }
 }
 
