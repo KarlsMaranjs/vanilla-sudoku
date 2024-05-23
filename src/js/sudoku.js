@@ -59,7 +59,7 @@ function sudoku() {
     const grid = generateGrid(9, randomInt);
     sudoku.innerHTML = printBoard(grid);
 
-    const board = new Board(document.getElementById('board'));
+    const board = new Board(document.getElementById('board'), grid);
     initControls(board)
 
 }

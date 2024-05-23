@@ -1,5 +1,4 @@
 import { EMPTY_CELL, SELECTED_CELL_CLASS } from "../constants.js";
-import Siblings from "./Siblings.js";
 
 
 export default class Cell {
@@ -19,7 +18,7 @@ export default class Cell {
     /**
      * @type HTMLTableCellElement
      */
-    element;
+    DOMElement;
 
     /**
      * @type {HTMLSpanElement}
@@ -27,20 +26,46 @@ export default class Cell {
     #valueHolder;
 
     /**
-     * @param cell {HTMLTableCellElement}
+     * @type {number}
      */
-    constructor(cell) {
-        this.element = cell;
-        this._value = 0;
-        this.index = Array.from(this.element.parentNode.children).findIndex((element) => element === cell);
-        this.siblings = new Siblings(this.element.parentNode, this.index);
-        this.#valueHolder = cell.querySelector('span.board-cell-value')
+    rowIndex;
+
+    /**
+     * @type {number}
+     */
+    colIndex;
+
+    /**
+     * @type {Board}
+     */
+    board;
+
+    /**
+     * @param cell {HTMLTableCellElement}
+     * @param value {number}
+     * @param rowIndex {number}
+     * @param colIndex {number}
+     * @param board {Board}
+     */
+    constructor(cell, value = 0, rowIndex, colIndex, board) {
+        this.DOMElement = cell;
+        this._value = value;
+        this.rowIndex = rowIndex;
+        this.colIndex = colIndex;
+        this.board = board;
+        this.index = Array.from(this.DOMElement.parentNode.children).findIndex((element) => element === cell);
+        this.siblings = null;
+        this.#valueHolder = this.DOMElement.querySelector('span.board-cell-value')
         this._selected = false;
     }
 
+    /**
+     * @param number
+     */
     set value(number) {
         this.#valueHolder.innerHTML = number > 0 ? number : EMPTY_CELL;
-        this._value = number;
+        this._value = number > 0 ? number : 0;
+        this.board.updateGrid(this._value, this.rowIndex, this.colIndex);
     }
 
     get value() {
@@ -52,8 +77,8 @@ export default class Cell {
      */
     set selected(selected) {
         selected
-            ? this.element.classList.add(SELECTED_CELL_CLASS)
-            : this.element.classList.remove(SELECTED_CELL_CLASS);
+            ? this.DOMElement.classList.add(SELECTED_CELL_CLASS)
+            : this.DOMElement.classList.remove(SELECTED_CELL_CLASS);
         this._selected = selected;
     }
 

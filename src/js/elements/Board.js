@@ -1,9 +1,15 @@
 import Cell from "./Cell.js";
+import Siblings from "./Siblings.js";
 
 export default class Board {
 
     /**
-     * @type {Cell[]}
+     * @type {number[][]}
+     */
+    grid;
+
+    /**
+     * @type {Cell[][]}
      */
     cells;
 
@@ -14,19 +20,42 @@ export default class Board {
 
     /**
      * @param board {HTMLTableElement}
+     * @param grid {number[][]}
      */
-    constructor(board) {
+    constructor(board, grid) {
         this.board = board;
+        this.grid = grid;
         this.cells = this.initCells();
         this._activeCell = null;
+        this.setSiblings()
     }
 
     /**
-     * @return {Cell[]}
+     * @return {Cell[][]}
      */
     initCells() {
-        const cells = this.board.getElementsByTagName('td')
-        return Array.from(cells).map(cell => new Cell(cell));
+        const rows = this.board.getElementsByTagName('tr');
+        return Array.from(rows).map((row, rowIndex) => {
+            const cells = row.getElementsByTagName('td');
+            return Array.from(cells)
+                .map((cell, colIndex)=> new Cell(cell, this.grid[rowIndex][colIndex], rowIndex, colIndex, this));
+        });
+    }
+
+    setSiblings(){
+        this.cells.forEach((row) => {
+            row.forEach((cell) => cell.siblings = new Siblings(this, cell.rowIndex, cell.colIndex))
+        });
+    }
+
+    /**
+     * @param value
+     * @param row
+     * @param col
+     */
+    updateGrid(value, row, col){
+        this.grid[row][col] = value;
+        // TODO Check if the puzzle is solved after updating the value
     }
 
     /**
@@ -47,6 +76,24 @@ export default class Board {
      */
     get activeCell() {
         return this._activeCell;
+    }
+
+    /**
+     * @description Generate a new game
+     */
+    generate() {
+
+    }
+
+    /**
+     * @description Validates if the board is solved
+     */
+    validate() {
+
+    }
+
+    solve() {
+
     }
 
 }

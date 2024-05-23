@@ -1,19 +1,15 @@
-import Cell from "./elements/Cell.js";
-import Board from "./elements/Board.js";
-
 /**
  * @param cell {Cell}
  * @param board {Board}
  * @return Cell
  */
 function selectCell(cell, board) {
+    if (board.activeCell !== null) board.activeCell.siblings.highlight('')
 
-    if (cell.selected) {
-        board.activeCell = null;
-    } else {
-        if (board.activeCell) board.activeCell.selected = false
-        board.activeCell = cell;
-    }
+    if (board.activeCell) board.activeCell.selected = false
+    board.activeCell = cell;
+
+    cell.siblings.highlight('rgb(234,234,234)')
 
     return cell
 }
@@ -28,7 +24,6 @@ function updateCellValue(key, board) {
     if (!selectedCell) return
 
     let value;
-
     switch (key) {
         case 'Backspace':
         case 'Delete':
@@ -36,14 +31,20 @@ function updateCellValue(key, board) {
             value = 0;
             break;
         case 'ArrowUp':
+            if (!selectedCell.siblings.previous.column) return
+            selectCell(selectedCell.siblings.previous.column, board)
             break;
         case 'ArrowDown':
+            if (!selectedCell.siblings.next.column) return
+            selectCell(selectedCell.siblings.next.column, board)
             break;
         case 'ArrowRight':
-            selectCell(selectedCell.siblings.previous.row, board)
+            if (!selectedCell.siblings.next.row) return
+            selectCell(selectedCell.siblings.next.row, board)
             break;
         case 'ArrowLeft':
-            selectCell(selectedCell.siblings.next.row, board)
+            if (!selectedCell.siblings.previous.row) return
+            selectCell(selectedCell.siblings.previous.row, board)
             break;
         default:
             value = validateNumericKey(key)
@@ -51,8 +52,7 @@ function updateCellValue(key, board) {
             break
     }
 
-
-    selectedCell.value = value;
+    selectedCell.value = value !== undefined ? value : selectedCell.value;
 }
 
 /**
@@ -73,9 +73,11 @@ function validateNumericKey(key) {
  */
 export function initControls(board) {
 
-    board.cells.forEach((cell) => {
-        cell.element.addEventListener('click', () => selectCell(cell, board));
+    board.cells.forEach((row) => {
+        row.forEach((cell) => {
+            cell.DOMElement.addEventListener('click', () => selectCell(cell, board));
+        })
     })
 
-    document.addEventListener('keyup', (e) => updateCellValue(e.key, board))
+    document.addEventListener('keydown', (e) => updateCellValue(e.key, board))
 }
