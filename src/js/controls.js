@@ -27,7 +27,6 @@ function updateCellValue(key, board) {
     switch (key) {
         case 'Backspace':
         case 'Delete':
-        case ' ':
             value = 0;
             break;
         case 'ArrowUp':
