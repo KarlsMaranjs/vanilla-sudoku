@@ -98,9 +98,9 @@ export default class Siblings {
     }
 
     colSiblings() {
-        return this.findColSiblings(this.board, this.rowIndex)
+        return this.findColSiblings(this.board, this.rowIndex, true)
             .reverse()
-            .concat(this.findColSiblings(this.board, this.rowIndex, false))
+            .concat(this.findColSiblings(this.board, this.rowIndex))
     }
 
     /**
@@ -117,7 +117,7 @@ export default class Siblings {
      * @param rowIndex {number}
      * @param backwards {boolean}
      */
-    findColSiblings(board, rowIndex, backwards = true) {
+    findColSiblings(board, rowIndex, backwards = false) {
         /**
          * @type {Cell}
          */
@@ -141,6 +141,6 @@ export default class Siblings {
     }
 
     highlight(color){
-        this.all.map((cell) => cell.DOMElement.style.background = color)
+        this.all.map((cell) => cell.highlight(color))
     }
 }

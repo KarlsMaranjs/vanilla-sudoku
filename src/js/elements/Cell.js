@@ -92,4 +92,8 @@ export default class Cell {
     get selected() {
         return this._selected;
     }
+
+    highlight(color) {
+        this.DOMElement.style.background = color
+    }
 }
