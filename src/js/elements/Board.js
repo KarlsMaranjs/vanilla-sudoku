@@ -38,7 +38,10 @@ export default class Board {
         return Array.from(rows).map((row, rowIndex) => {
             const cells = row.getElementsByTagName('td');
             return Array.from(cells)
-                .map((cell, colIndex)=> new Cell(cell, this.grid[rowIndex][colIndex], rowIndex, colIndex, this));
+                .map((cell, colIndex) => {
+                    const value = this.grid[rowIndex][colIndex];
+                    return new Cell(cell, value, rowIndex, colIndex, this, value === 0);
+                });
         });
     }
 

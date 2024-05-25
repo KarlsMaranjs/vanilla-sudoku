@@ -46,7 +46,7 @@ function updateCellValue(key, board) {
             break
     }
 
-    if (Number.isNaN(value)) return
+    if (Number.isNaN(value) || !selectedCell.editable) return
 
     selectedCell.value = value !== undefined ? value : selectedCell.value;
 }

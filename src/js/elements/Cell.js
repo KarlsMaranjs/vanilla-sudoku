@@ -46,8 +46,9 @@ export default class Cell {
      * @param rowIndex {number}
      * @param colIndex {number}
      * @param board {Board}
+     * @param editable {boolean}
      */
-    constructor(cell, value = 0, rowIndex, colIndex, board) {
+    constructor(cell, value = 0, rowIndex, colIndex, board, editable = true) {
         this.DOMElement = cell;
         this._value = value;
         this.rowIndex = rowIndex;
@@ -57,6 +58,7 @@ export default class Cell {
         this.siblings = null;
         this.#valueHolder = this.DOMElement.querySelector('span.board-cell-value')
         this._selected = false;
+        this.editable = editable;
     }
 
     /**
