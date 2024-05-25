@@ -4,12 +4,14 @@
  * @return Cell
  */
 function selectCell(cell, board) {
-    if (board.activeCell !== null) board.activeCell.siblings.highlight('')
+    let activeCell = cell
 
-    if (board.activeCell) board.activeCell.selected = false
-    board.activeCell = cell;
+    if (cell.selected){
+        cell.selected = false;
+        activeCell = null
+    }
 
-    cell.siblings.highlight('rgb(234,234,234)')
+    board.activeCell = activeCell;
 
     return cell
 }
@@ -47,23 +49,24 @@ function updateCellValue(key, board) {
             break;
         default:
             value = validateNumericKey(key)
-            if (isNaN(value) || value === null) return
             break
     }
+
+    if (Number.isNaN(value)) return
 
     selectedCell.value = value !== undefined ? value : selectedCell.value;
 }
 
 /**
  * @param key {string}
- * @return {number | null}
+ * @return {number | NaN}
  */
 function validateNumericKey(key) {
     if (parseInt(key) && parseInt(key) >= 0 && parseInt(key) <= 9) {
         return parseInt(key)
     }
 
-    return null
+    return NaN
 }
 
 /**

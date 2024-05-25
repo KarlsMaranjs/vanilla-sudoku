@@ -38,17 +38,17 @@ body {
 }
 
 .board-cell:hover {
-    background: #319ccd;
+    background: #ffd29c;
     color: white;
     cursor: pointer
 }
 
 .board-cell:active {
-    background: brown;
+    background: #fa9a3e;
 }
 
 .board-cell-selected {
-    background: chartreuse;
+    background: #fbba73;
 }
 
 .board-cell:nth-child(3n):not(:last-child) {

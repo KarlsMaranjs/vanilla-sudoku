@@ -76,12 +76,19 @@ export default class Cell {
      * @param selected {boolean}
      */
     set selected(selected) {
-        selected
-            ? this.DOMElement.classList.add(SELECTED_CELL_CLASS)
-            : this.DOMElement.classList.remove(SELECTED_CELL_CLASS);
+        if (selected){
+            this.DOMElement.classList.add(SELECTED_CELL_CLASS)
+            this.siblings.highlight('rgb(234,234,234)')
+        } else {
+            this.DOMElement.classList.remove(SELECTED_CELL_CLASS)
+            this.siblings.highlight('')
+        }
         this._selected = selected;
     }
 
+    /**
+     * @return {boolean}
+     */
     get selected() {
         return this._selected;
     }

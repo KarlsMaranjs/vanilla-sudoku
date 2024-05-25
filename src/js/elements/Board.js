@@ -65,6 +65,7 @@ export default class Board {
         if (cell === null) {
             this._activeCell.selected = false;
         } else {
+            if (this._activeCell !== null) this._activeCell.selected = false;
             cell.selected = true;
         }
 
