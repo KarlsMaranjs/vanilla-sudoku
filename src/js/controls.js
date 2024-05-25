@@ -4,14 +4,8 @@
  * @return Cell
  */
 function selectCell(cell, board) {
-    let activeCell = cell
-
-    if (cell.selected){
-        cell.selected = false;
-        activeCell = null
-    }
-
-    board.activeCell = activeCell;
+    cell.selected = !cell.selected;
+    board.activeCell = !cell.selected ? null : cell;
 
     return cell
 }
