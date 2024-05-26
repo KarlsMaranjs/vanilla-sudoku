@@ -73,7 +73,7 @@ export default class Cell {
         this.#valueHolder.innerHTML = number > 0 ? number : EMPTY_CELL;
         this._value = number > 0 ? number : 0;
 
-        this.board.cells.flat(1).map((cell) => cell.highlight(''))
+        this.board.cells.map((cell) => cell.highlight(''))
         const repeated = this.siblings.sameValue(number);
         if (repeated.length > 0 && number > 0) {
             repeated.map((cell) => cell.highlight('red'))

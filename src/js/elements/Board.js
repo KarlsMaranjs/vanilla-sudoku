@@ -4,7 +4,7 @@ import Siblings from "./Siblings.js";
 export default class Board {
 
     /**
-     * @type {Cell[][]}
+     * @type {Cell[]}
      */
     cells;
 
@@ -27,11 +27,11 @@ export default class Board {
 
     /**
      * @param grid {number[][]}
-     * @return {Cell[][]}
+     * @return {Cell[]}
      */
     initCells(grid) {
         const rows = this.board.getElementsByTagName('tr');
-        return Array.from(rows).map((row, rowIndex) => {
+        const cellsGrid = Array.from(rows).map((row, rowIndex) => {
             const cells = row.getElementsByTagName('td');
             return Array.from(cells)
                 .map((cell, colIndex) => {
@@ -39,28 +39,21 @@ export default class Board {
                     return new Cell(cell, value, rowIndex, colIndex, this, value === 0, value);
                 });
         });
+
+        return cellsGrid.flat();
     }
 
     setSiblings(){
-        this.cells.forEach((row) => {
-            row.forEach((cell) => cell.siblings = new Siblings(this, cell.rowIndex, cell.colIndex))
-        });
+        this.cells.forEach((cell) => cell.siblings = new Siblings(this, cell.rowIndex, cell.colIndex));
     }
 
     /**
      * @param cell {Cell}
      */
     set activeCell(cell) {
-        if (this._activeCell === null && cell === null) return
-
-        if (cell === null) {
-            this._activeCell.selected = false;
-        } else {
-            if (this._activeCell !== null) this._activeCell.selected = false;
-            cell.selected = true;
-        }
-
+        if (this._activeCell !== null) this._activeCell.selected = false;
         this._activeCell = cell;
+        if (cell !== null) cell.selected = true;
     }
 
     /**
@@ -71,23 +64,15 @@ export default class Board {
     }
 
     /**
-     * @description Generate a new game
-     */
-    generate() {
-
-    }
-
-    /**
      * @description Validates if the board is isSolved
      * @return {boolean}
      */
     isSolved() {
-        return !this.cells.flat(1).some((cell) => cell.value !== cell.solution);
+        return !this.cells.some((cell) => cell.value !== cell.solution);
     }
 
     solve() {
-        for (let row of this.cells) {
-            for (let cell of row) {
+        for (let cell of this.cells) {
                 if (cell.solution !== 0) continue;
                 for (let number = 1; number < 10; number++) {
                     if (!cell.siblings.sameSolution(number).length) {
@@ -98,7 +83,6 @@ export default class Board {
                 }
                 return false;
             }
-        }
         return true;
     }
 

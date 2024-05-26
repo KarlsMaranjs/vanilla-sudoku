@@ -66,30 +66,30 @@ export default class Siblings {
         this.block = this.blockSiblings();
 
         this.previous = {
-            row: this.row[colIndex - 1],
-            column: this.column[rowIndex - 1],
+            row: this.row.find((cell) => cell.colIndex === colIndex - 1 && cell.rowIndex === this.rowIndex),
+            column: this.column.find((cell) => cell.rowIndex === rowIndex - 1 && cell.colIndex === this.colIndex)
         }
 
         this.next = {
-            row: this.row[colIndex],
-            column: this.column[rowIndex],
+            row: this.row.find((cell) => cell.colIndex === colIndex + 1 && cell.rowIndex === this.rowIndex),
+            column: this.column.find((cell) => cell.rowIndex === rowIndex + 1 && cell.colIndex === this.colIndex)
         }
 
-        this.all = this.row.concat(this.column)
-            .concat(this.block.filter((cell) => !this.row.includes(cell) && !this.column.includes(cell)))
+        this.all = this.row.concat(this.column).concat(this.block)
 
     }
 
     blockSiblings() {
         const board = this.board;
-        const blockRow = Math.floor(this.rowIndex / 3) * 3;
-        const blockCol = Math.floor(this.colIndex / 3) * 3;
+        const blockSize = 3;
+        const blockRow = Math.floor(this.rowIndex / blockSize) * blockSize;
+        const blockCol = Math.floor(this.colIndex / blockSize) * blockSize;
         const siblings = [];
 
-        for (let row = blockRow; row < blockRow + 3; row++) {
-            for (let col = blockCol; col < blockCol + 3; col++) {
+        for (let row = blockRow; row < blockRow + blockSize; row++) {
+            for (let col = blockCol; col < blockCol + blockSize; col++) {
                 if (row !== this.rowIndex || col !== this.colIndex) {
-                    siblings.push(board.cells[row][col]);
+                    siblings.push(board.cells.find((cell) => cell.rowIndex === row && cell.colIndex === col));
                 }
             }
         }
@@ -107,9 +107,7 @@ export default class Siblings {
      * @return {Cell[]}
      */
     rowSiblings() {
-        const siblings = this.board.cells[this.rowIndex].slice();
-        siblings.splice(this.colIndex, 1);
-        return siblings;
+        return this.board.cells.filter((cell) => cell.rowIndex === this.rowIndex && cell.colIndex !== this.colIndex);
     }
 
     /**
@@ -118,26 +116,19 @@ export default class Siblings {
      * @param backwards {boolean}
      */
     findColSiblings(board, rowIndex, backwards = false) {
-        /**
-         * @type {Cell}
-         */
-        let columnSibling;
-        let nextIndex = backwards ? rowIndex - 1 : rowIndex + 1;
+        const nextIndex = backwards ? rowIndex - 1 : rowIndex + 1;
 
-        if (backwards && nextIndex >= 0) {
-            columnSibling = board.cells[nextIndex][this.colIndex];
-        } else if (!backwards && nextIndex < board.cells.length) {
-            columnSibling = board.cells[nextIndex][this.colIndex];
-        } else {
-            return [];
+        if ((backwards && nextIndex >= 0) || (!backwards && nextIndex < 9)) {
+            const columnSibling = board.cells.find((cell) => {
+                return cell.rowIndex === nextIndex && cell.colIndex === this.colIndex;
+            });
+
+            if (!columnSibling) return [];
+
+            return [columnSibling].concat(this.findColSiblings(board, nextIndex, backwards));
         }
 
-        /**
-         * @type {Cell[]}
-         */
-        let siblings = [];
-        siblings.push(columnSibling);
-        return siblings.concat(this.findColSiblings(board, nextIndex, backwards));
+        return [];
     }
 
     highlight(color){

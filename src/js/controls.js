@@ -4,10 +4,8 @@
  * @return Cell
  */
 function selectCell(cell, board) {
-    cell.selected = !cell.selected;
-    board.activeCell = !cell.selected ? null : cell;
-
-    return cell
+    board.activeCell = !cell.selected ? cell : null;
+    return cell;
 }
 
 /**
@@ -46,9 +44,9 @@ function updateCellValue(key, board) {
             break
     }
 
-    if (Number.isNaN(value) || !selectedCell.editable) return
+    if (Number.isNaN(value) || value === undefined || !selectedCell.editable) return
 
-    selectedCell.value = value !== undefined ? value : selectedCell.value;
+    selectedCell.value = value;
 }
 
 /**
@@ -69,10 +67,8 @@ function validateNumericKey(key) {
  */
 export function initControls(board) {
 
-    board.cells.forEach((row) => {
-        row.forEach((cell) => {
+    board.cells.forEach((cell) => {
             cell.DOMElement.addEventListener('click', () => selectCell(cell, board));
-        })
     })
 
     document.addEventListener('keydown', (e) => updateCellValue(e.key, board))
