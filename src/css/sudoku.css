@@ -38,19 +38,27 @@ body {
 }
 
 .board-cell:hover {
-    background: #ffd29c;
-    color: white;
+    background: #ffa;
     cursor: pointer
 }
 
 .board-cell:active {
-    background: #fa9a3e;
+    background: #f0f08e;
 }
 
 .board-cell-selected {
-    background: #fbba73;
+    background: #f0f08e;
 }
 
 .board-cell:nth-child(3n):not(:last-child) {
     border-right: solid 0.4rem rgb(49, 49, 49)
 }
+
+.editable {
+}
+
+.given-solution {
+    background: #e8e8c6;
+    font-weight: bold;
+}
+

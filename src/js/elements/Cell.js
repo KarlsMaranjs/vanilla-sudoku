@@ -9,13 +9,6 @@ export default class Cell {
     siblings;
 
     /**
-     * @type number
-     * @description Represents the numeric index, starting from zero, for the current element
-     * relative to the list of children in the parent
-     */
-    index;
-
-    /**
      * @type HTMLTableCellElement
      */
     DOMElement;
@@ -24,6 +17,11 @@ export default class Cell {
      * @type {HTMLSpanElement}
      */
     #valueHolder;
+
+    /**
+     * @type {number}
+     */
+    solution;
 
     /**
      * @type {number}
@@ -41,20 +39,27 @@ export default class Cell {
     board;
 
     /**
+     * @private
+     * @type {boolean}
+     */
+    _editable;
+
+    /**
      * @param cell {HTMLTableCellElement}
      * @param value {number}
      * @param rowIndex {number}
      * @param colIndex {number}
      * @param board {Board}
      * @param editable {boolean}
+     * @param solution {number}
      */
-    constructor(cell, value = 0, rowIndex, colIndex, board, editable = true) {
+    constructor(cell, value = 0, rowIndex, colIndex, board, editable = true, solution = solution) {
         this.DOMElement = cell;
         this._value = value;
+        this.solution = solution;
         this.rowIndex = rowIndex;
         this.colIndex = colIndex;
         this.board = board;
-        this.index = Array.from(this.DOMElement.parentNode.children).findIndex((element) => element === cell);
         this.siblings = null;
         this.#valueHolder = this.DOMElement.querySelector('span.board-cell-value')
         this._selected = false;
@@ -67,7 +72,12 @@ export default class Cell {
     set value(number) {
         this.#valueHolder.innerHTML = number > 0 ? number : EMPTY_CELL;
         this._value = number > 0 ? number : 0;
-        this.board.updateGrid(this._value, this.rowIndex, this.colIndex);
+
+        this.board.cells.flat(1).map((cell) => cell.highlight(''))
+        const repeated = this.siblings.sameValue(number);
+        if (repeated.length > 0 && number > 0) {
+            repeated.map((cell) => cell.highlight('red'))
+        }
     }
 
     get value() {
@@ -93,6 +103,15 @@ export default class Cell {
      */
     get selected() {
         return this._selected;
+    }
+
+    set editable(editable) {
+        this.DOMElement.classList.add(editable ? 'editable' : 'given-solution');
+        this._editable = editable;
+    }
+
+    get editable() {
+        return this._editable
     }
 
     highlight(color) {

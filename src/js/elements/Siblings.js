@@ -143,4 +143,20 @@ export default class Siblings {
     highlight(color){
         this.all.map((cell) => cell.highlight(color))
     }
+
+    /**
+     * @param number
+     * @return {Cell[]}
+     */
+    sameSolution(number) {
+        return this.all.filter((cell) => cell.solution === number);
+    }
+
+    /**
+     * @param number
+     * @return {Cell[]}
+     */
+    sameValue(number) {
+        return this.all.filter((cell) => cell.value === number);
+    }
 }

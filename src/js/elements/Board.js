@@ -4,11 +4,6 @@ import Siblings from "./Siblings.js";
 export default class Board {
 
     /**
-     * @type {number[][]}
-     */
-    grid;
-
-    /**
      * @type {Cell[][]}
      */
     cells;
@@ -24,23 +19,24 @@ export default class Board {
      */
     constructor(board, grid) {
         this.board = board;
-        this.grid = grid;
-        this.cells = this.initCells();
+        this.cells = this.initCells(grid);
         this._activeCell = null;
         this.setSiblings()
+        this.solve();
     }
 
     /**
+     * @param grid {number[][]}
      * @return {Cell[][]}
      */
-    initCells() {
+    initCells(grid) {
         const rows = this.board.getElementsByTagName('tr');
         return Array.from(rows).map((row, rowIndex) => {
             const cells = row.getElementsByTagName('td');
             return Array.from(cells)
                 .map((cell, colIndex) => {
-                    const value = this.grid[rowIndex][colIndex];
-                    return new Cell(cell, value, rowIndex, colIndex, this, value === 0);
+                    const value = grid[rowIndex][colIndex];
+                    return new Cell(cell, value, rowIndex, colIndex, this, value === 0, value);
                 });
         });
     }
@@ -49,16 +45,6 @@ export default class Board {
         this.cells.forEach((row) => {
             row.forEach((cell) => cell.siblings = new Siblings(this, cell.rowIndex, cell.colIndex))
         });
-    }
-
-    /**
-     * @param value
-     * @param row
-     * @param col
-     */
-    updateGrid(value, row, col){
-        this.grid[row][col] = value;
-        // TODO Check if the puzzle is solved after updating the value
     }
 
     /**
@@ -92,14 +78,28 @@ export default class Board {
     }
 
     /**
-     * @description Validates if the board is solved
+     * @description Validates if the board is isSolved
+     * @return {boolean}
      */
-    validate() {
-
+    isSolved() {
+        return !this.cells.flat(1).some((cell) => cell.value !== cell.solution);
     }
 
     solve() {
-
+        for (let row of this.cells) {
+            for (let cell of row) {
+                if (cell.solution !== 0) continue;
+                for (let number = 1; number < 10; number++) {
+                    if (!cell.siblings.sameSolution(number).length) {
+                        cell.solution = number
+                        if (this.solve()) return true;
+                        cell.solution = 0;
+                    }
+                }
+                return false;
+            }
+        }
+        return true;
     }
 
 }

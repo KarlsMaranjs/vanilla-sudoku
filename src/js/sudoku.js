@@ -56,7 +56,32 @@ function printBoard(grid){
 
 function sudoku() {
     let sudoku = document.getElementById('board');
-    const grid = generateGrid(9, randomInt);
+    // const grid = generateGrid(9, randomInt);
+
+    // EXTREME
+    const grid = [
+        [0, 0, 0, 0, 2, 0, 7, 0, 0],
+        [0, 0, 0, 6, 1, 9, 0, 0, 0],
+        [0, 0, 0, 0, 4, 0, 2, 5, 0],
+        [0, 0, 9, 0, 0, 4, 0, 1, 0],
+        [0, 6, 1, 0, 0, 0, 0, 0, 2],
+        [0, 0, 0, 0, 0, 0, 0, 6, 0],
+        [0, 2, 0, 0, 0, 8, 0, 0, 0],
+        [5, 0, 0, 0, 0, 0, 3, 0, 8],
+        [4, 0, 0, 9, 0, 0, 0, 0, 0]
+    ]
+
+    // const grid = [
+    //     [0, 6, 0, 3, 7, 8, 0, 0, 5],
+    //     [0, 0, 4, 0, 0, 1, 9, 2, 0],
+    //     [0, 8, 5, 4, 0, 0, 7, 0, 3],
+    //     [0, 3, 0, 0, 0, 4, 0, 7, 0],
+    //     [6, 4, 9, 2, 0, 7, 8, 0, 0],
+    //     [0, 0, 7, 6, 0, 0, 0, 0, 0],
+    //     [2, 0, 8, 7, 0, 5, 0, 9, 6],
+    //     [4, 0, 0, 0, 0, 0, 0, 5, 0],
+    //     [0, 5, 3, 1, 9, 0, 2, 0, 0]
+    // ]
     sudoku.innerHTML = printBoard(grid);
 
     const board = new Board(document.getElementById('board'), grid);
