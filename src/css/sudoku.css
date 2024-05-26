@@ -2,7 +2,7 @@ body {
     width: 100vw;
     height: 100vh;
     display: flex;
-    background: beige;
+    background: #f0f0e2;
     overflow: hidden;
 }
 
@@ -38,16 +38,16 @@ body {
 }
 
 .board-cell:hover {
-    background: #ffa;
+    background: #ffdbad;
     cursor: pointer
 }
 
 .board-cell:active {
-    background: #f0f08e;
+    background: #ffdbad;
 }
 
 .board-cell-selected {
-    background: #f0f08e;
+    background: #ffdbad;
 }
 
 .board-cell:nth-child(3n):not(:last-child) {
@@ -58,7 +58,7 @@ body {
 }
 
 .given-solution {
-    background: #e8e8c6;
+    background: rgb(234, 226, 202);
     font-weight: bold;
 }
 

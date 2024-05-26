@@ -19,8 +19,9 @@ export default class Board {
      */
     constructor(board, grid) {
         this.board = board;
-        this.cells = this.initCells(grid);
         this._activeCell = null;
+        this.cells = [];
+        this.initCells(grid);
         this.setSiblings()
         this.solve();
     }
@@ -31,16 +32,14 @@ export default class Board {
      */
     initCells(grid) {
         const rows = this.board.getElementsByTagName('tr');
-        const cellsGrid = Array.from(rows).map((row, rowIndex) => {
+        Array.from(rows).map((row, rowIndex) => {
             const cells = row.getElementsByTagName('td');
             return Array.from(cells)
                 .map((cell, colIndex) => {
                     const value = grid[rowIndex][colIndex];
-                    return new Cell(cell, value, rowIndex, colIndex, this, value === 0, value);
+                    this.cells.push(new Cell(cell, value, rowIndex, colIndex, this, value === 0, value));
                 });
         });
-
-        return cellsGrid.flat();
     }
 
     setSiblings(){

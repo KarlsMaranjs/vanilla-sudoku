@@ -70,14 +70,24 @@ export default class Cell {
      * @param number
      */
     set value(number) {
-        this.#valueHolder.innerHTML = number > 0 ? number : EMPTY_CELL;
-        this._value = number > 0 ? number : 0;
+        if (number === this._value || !this._editable) return;
 
-        this.board.cells.map((cell) => cell.highlight(''))
-        const repeated = this.siblings.sameValue(number);
-        if (repeated.length > 0 && number > 0) {
-            repeated.map((cell) => cell.highlight('red'))
+        let htmlContent = EMPTY_CELL;
+        let newValue = 0;
+        let repeated = this.siblings.sameValue(this._value);
+
+        if (number > 0) {
+            newValue = number < 10 ? number : 0;
+            htmlContent = number;
+            repeated = this.siblings.sameValue(number);
         }
+
+        if (repeated.length > 0) {
+            repeated.map((cell) => cell.highlight(number > 0 ? '#fba2a2' : ''))
+        }
+
+        this.#valueHolder.innerHTML = htmlContent;
+        this._value = newValue;
     }
 
     get value() {
@@ -90,7 +100,7 @@ export default class Cell {
     set selected(selected) {
         if (selected){
             this.DOMElement.classList.add(SELECTED_CELL_CLASS)
-            this.siblings.highlight('rgb(234,234,234)')
+            this.siblings.highlight('rgb(228,210,185)')
         } else {
             this.DOMElement.classList.remove(SELECTED_CELL_CLASS)
             this.siblings.highlight('')
