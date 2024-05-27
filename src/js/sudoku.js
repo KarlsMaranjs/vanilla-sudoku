@@ -1,6 +1,7 @@
 import { EMPTY_CELL } from "./constants.js";
 import Board from "./elements/Board.js";
 import { initControls } from "./controls.js";
+import { storage } from "./elements/Storage.js";
 
 /**
  * @description Generates a random number in the interval delimited by `min` and `max` inclusively
@@ -59,7 +60,7 @@ function sudoku() {
     // const grid = generateGrid(9, randomInt);
 
     // EXTREME
-    const grid = [
+    let grid = [
         [0, 0, 0, 0, 2, 0, 7, 0, 0],
         [0, 0, 0, 6, 1, 9, 0, 0, 0],
         [0, 0, 0, 0, 4, 0, 2, 5, 0],
@@ -82,11 +83,11 @@ function sudoku() {
     //     [4, 0, 0, 0, 0, 0, 0, 5, 0],
     //     [0, 5, 3, 1, 9, 0, 2, 0, 0]
     // ]
-    sudoku.innerHTML = printBoard(grid);
 
-    const board = new Board(document.getElementById('board'), grid);
+    sudoku.innerHTML = printBoard(storage.grid.length > 0 ? storage.grid : grid);
+
+    const board = new Board(sudoku, grid);
     initControls(board)
-
 }
 
 sudoku();

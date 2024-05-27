@@ -1,5 +1,6 @@
 import Cell from "./Cell.js";
 import Siblings from "./Siblings.js";
+import { storage } from "./Storage.js";
 
 export default class Board {
 
@@ -7,6 +8,16 @@ export default class Board {
      * @type {Cell[]}
      */
     cells;
+
+    /**
+     * @type {HTMLTableElement}
+     */
+    board;
+
+    /**
+     * @type {number[][]}
+     */
+    grid;
 
     /**
      * @type {Cell | null}
@@ -19,10 +30,11 @@ export default class Board {
      */
     constructor(board, grid) {
         this.board = board;
+        this.grid = grid;
         this._activeCell = null;
         this.cells = [];
         this.initCells(grid);
-        this.setSiblings()
+        this.setSiblings();
         this.solve();
     }
 
@@ -36,10 +48,27 @@ export default class Board {
             const cells = row.getElementsByTagName('td');
             return Array.from(cells)
                 .map((cell, colIndex) => {
-                    const value = grid[rowIndex][colIndex];
-                    this.cells.push(new Cell(cell, value, rowIndex, colIndex, this, value === 0, value));
+                    let value = grid[rowIndex][colIndex];
+                    let editable = value === 0;
+
+                    if (storage.grid.length > 0) {
+                        value = storage.grid[rowIndex][colIndex];
+                        editable = storage.grid[rowIndex][colIndex] !== grid[rowIndex][colIndex] || value === 0
+                    }
+
+                    this.cells.push(new Cell(cell, value, rowIndex, colIndex, this, editable, value));
                 });
         });
+    }
+
+    /**
+     * @param value
+     * @param row
+     * @param col
+     */
+    updateGrid(value, row, col) {
+        this.grid[row][col] = value;
+        storage.grid = this.grid;
     }
 
     setSiblings(){

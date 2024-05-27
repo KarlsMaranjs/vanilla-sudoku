@@ -88,6 +88,8 @@ export default class Cell {
 
         this.#valueHolder.innerHTML = htmlContent;
         this._value = newValue;
+
+        this.board.updateGrid(newValue, this.rowIndex, this.colIndex);
     }
 
     get value() {
