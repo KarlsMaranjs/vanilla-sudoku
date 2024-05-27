@@ -69,6 +69,10 @@ export function initControls(board) {
 
     board.cells.forEach((cell) => {
             cell.DOMElement.addEventListener('click', () => selectCell(cell, board));
+        cell.DOMElement.addEventListener('touchend', (e) => {
+            e.preventDefault()
+            selectCell(cell, board)
+        });
     })
 
     document.addEventListener('keydown', (e) => updateCellValue(e.key, board))
