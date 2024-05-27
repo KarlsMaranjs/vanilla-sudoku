@@ -16,7 +16,7 @@ export default class Cell {
     /**
      * @type {HTMLSpanElement}
      */
-    #valueHolder;
+    _valueHolder;
 
     /**
      * @type {number}
@@ -61,7 +61,7 @@ export default class Cell {
         this.colIndex = colIndex;
         this.board = board;
         this.siblings = null;
-        this.#valueHolder = this.DOMElement.querySelector('span.board-cell-value')
+        this._valueHolder = this.DOMElement.querySelector('span.board-cell-value')
         this._selected = false;
         this.editable = editable;
     }
@@ -86,7 +86,7 @@ export default class Cell {
             repeated.map((cell) => cell.highlight(number > 0 ? '#fba2a2' : ''))
         }
 
-        this.#valueHolder.innerHTML = htmlContent;
+        this._valueHolder.innerHTML = htmlContent;
         this._value = newValue;
 
         this.board.updateGrid(newValue, this.rowIndex, this.colIndex);

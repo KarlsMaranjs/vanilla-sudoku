@@ -12,9 +12,6 @@ class Storage {
         return Storage.instance;
     }
 
-    constructor() {
-    }
-
     set grid(grid) {
         localStorage.setItem('grid', JSON.stringify(grid));
     }
