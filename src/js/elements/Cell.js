@@ -1,4 +1,5 @@
 import { EMPTY_CELL, SELECTED_CELL_CLASS } from "../constants.js";
+import Annotations from "./Annotations.js";
 
 
 export default class Cell {
@@ -64,6 +65,7 @@ export default class Cell {
         this._valueHolder = this.DOMElement.querySelector('span.board-cell-value')
         this._selected = false;
         this.editable = editable;
+        this._annotations = new Annotations();
     }
 
     /**
@@ -124,6 +126,10 @@ export default class Cell {
 
     get editable() {
         return this._editable
+    }
+
+    get annotations() {
+        return this._annotations.annotations;
     }
 
     highlight(color) {
