@@ -1,5 +1,6 @@
 import { EMPTY_CELL, SELECTED_CELL_CLASS } from "../constants.js";
 import Annotations from "./Annotations.js";
+import { annotations } from "../sudoku.js";
 
 
 export default class Cell {
@@ -62,10 +63,10 @@ export default class Cell {
         this.colIndex = colIndex;
         this.board = board;
         this.siblings = null;
-        this._valueHolder = this.DOMElement.querySelector('span.board-cell-value')
+        this._valueHolder = this.DOMElement.querySelector('div.board-cell-value')
         this._selected = false;
         this.editable = editable;
-        this._annotations = new Annotations();
+        this._annotations = new Annotations(this);
     }
 
     /**
@@ -82,6 +83,11 @@ export default class Cell {
             newValue = number < 10 ? number : 0;
             htmlContent = number;
             repeated = this.siblings.sameValue(number);
+            this._valueHolder.classList.remove('annotations')
+            this._annotations.clear()
+        } else {
+            htmlContent = annotations()
+            this._valueHolder.classList.add('annotations')
         }
 
         if (repeated.length > 0) {
@@ -129,7 +135,11 @@ export default class Cell {
     }
 
     get annotations() {
-        return this._annotations.annotations;
+        return this._annotations;
+    }
+
+    getAnnotationsHolder() {
+        return this.DOMElement.querySelector('div.annotations')
     }
 
     highlight(color) {

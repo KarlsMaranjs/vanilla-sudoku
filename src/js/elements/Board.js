@@ -1,8 +1,13 @@
 import Cell from "./Cell.js";
 import Siblings from "./Siblings.js";
 import { storage } from "./Storage.js";
+import { ANNOTATE, PLAY } from "../constants.js";
 
 export default class Board {
+
+    /**
+     * @typedef {'play' | 'annotate'} Mode
+     */
 
     /**
      * @type {Cell[]}
@@ -20,6 +25,11 @@ export default class Board {
     grid;
 
     /**
+     * @type {Mode}
+     */
+    mode;
+
+    /**
      * @type {Cell | null}
      */
     _activeCell;
@@ -33,6 +43,7 @@ export default class Board {
         this.grid = grid;
         this._activeCell = null;
         this.cells = [];
+        this.mode = PLAY;
         this.initCells(grid);
         this.setSiblings();
         this.solve();

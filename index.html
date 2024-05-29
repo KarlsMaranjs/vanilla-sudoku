@@ -6,7 +6,15 @@
     <title>Sudoku</title>
 </head>
 <body>
-<table class="noselect" id="board"></table>
+<div id="content-wrapper">
+    <div id="menu">
+        <div id="mode-selector">
+            <button class="mode-selector" data-mode="play">Play</button>
+            <button class="mode-selector" data-mode="annotate">Annotate</button>
+        </div>
+    </div>
+    <table class="noselect" id="board"></table>
+</div>
 <script src="src/js/constants.js" type="module"></script>
 <script src="src/js/sudoku.js" type="module"></script>
 <script src="src/js/controls.js" type="module"></script>

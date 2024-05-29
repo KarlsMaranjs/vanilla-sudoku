@@ -1,3 +1,5 @@
+import { ANNOTATE, PLAY } from "./constants.js";
+
 /**
  * @param cell {Cell}
  * @param board {Board}
@@ -46,7 +48,26 @@ function updateCellValue(key, board) {
 
     if (Number.isNaN(value) || value === undefined || !selectedCell.editable) return
 
-    selectedCell.value = value;
+    if (board.mode === PLAY) {
+        selectedCell.value = value;
+    } else if (board.mode === ANNOTATE && selectedCell.value === 0) {
+        if (value > 0) {
+            selectedCell.annotations.add(value)
+        } else {
+            selectedCell.annotations.clear()
+        }
+    }
+}
+
+/**
+ * @param current {HTMLButtonElement}
+ * @param others {HTMLButtonElement[]}
+ * @param board {Board}
+ */
+export function selectMode(current, others, board) {
+    others.forEach(toggle => toggle.classList.remove('active-toggle-option'))
+    current.classList.add('active-toggle-option')
+    board.mode = current.getAttribute('data-mode')
 }
 
 /**
@@ -66,14 +87,25 @@ function validateNumericKey(key) {
  * @param board {Board}
  */
 export function initControls(board) {
-
-    board.cells.forEach((cell) => {
-            cell.DOMElement.addEventListener('click', () => selectCell(cell, board));
-        cell.DOMElement.addEventListener('touchend', (e) => {
-            e.preventDefault()
-            selectCell(cell, board)
+    /**
+     * @type {HTMLButtonElement[]}
+     */
+    const selectors = Array.from(document.getElementsByClassName('mode-selector'));
+    ['click', 'touchend'].forEach(key => {
+        board.cells.forEach((cell) => {
+            cell.DOMElement.addEventListener(key, (event) => {
+                if (key !== 'click') event.preventDefault();
+                selectCell(cell, board)
+            });
         });
+
+        selectors.forEach(toggle => toggle.addEventListener(key,
+            (event) => {
+                if (key !== 'click') event.preventDefault();
+                selectMode(toggle, selectors, board)
+            }));
     })
 
     document.addEventListener('keydown', (e) => updateCellValue(e.key, board))
+
 }

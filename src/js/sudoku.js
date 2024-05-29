@@ -1,7 +1,7 @@
-import { EMPTY_CELL } from "./constants.js";
 import Board from "./elements/Board.js";
-import { initControls } from "./controls.js";
+import { initControls, selectMode } from "./controls.js";
 import { storage } from "./elements/Storage.js";
+import { EMPTY_CELL } from "./constants.js";
 
 /**
  * @description Generates a random number in the interval delimited by `min` and `max` inclusively
@@ -19,9 +19,20 @@ function randomInt(min, max) {
  * @returns {number[][]} 2D array representing the generated grid.
  */
 function generateGrid(length, generator) {
-    return Array.from({ length: length }, () =>
-        Array.from({ length: length }, () => generator(0, 0))
+    return Array.from({length: length}, () =>
+        Array.from({length: length}, () => generator(0, 0))
     );
+}
+
+
+export function annotations() {
+    const grid = [];
+    for (let i = 0; i < 3; i++) {
+        for (let j = 0; j < 3; j++) {
+            grid.push(`<div class="annotation-square">${EMPTY_CELL}</div>`);
+        }
+    }
+    return grid.join('');
 }
 
 /**
@@ -30,11 +41,11 @@ function generateGrid(length, generator) {
  */
 function cell(number) {
     return `<td class="board-cell">
-                <span class="board-cell-value">
-                    ${number === 0 ? EMPTY_CELL : number}
-                </span>
+                <div class="board-cell-value ${number === 0 ? 'annotations' : ''}">
+                    ${number === 0 ? annotations() : number}
+                </div>
             </td>`
-    ;
+        ;
 }
 
 /**
@@ -51,7 +62,7 @@ function row(values) {
  * @param grid {number[][]}
  * @returns {string}
  */
-function printBoard(grid){
+function printBoard(grid) {
     return grid.map(row).join('');
 }
 
@@ -87,6 +98,10 @@ function sudoku() {
     sudoku.innerHTML = printBoard(storage.grid.length > 0 ? storage.grid : grid);
 
     const board = new Board(sudoku, grid);
+    const selectors = Array.from(document.getElementsByClassName('mode-selector'));
+    const selected = selectors.find((selector) => selector.getAttribute('data-mode') === board.mode);
+    selectMode(selected, selectors, board);
+
     initControls(board)
 }
 
