@@ -49,10 +49,6 @@ body {
     color: #676767;
 }
 
-.mode-selector:hover {
-    background: rgba(220, 220, 220, 0.8);
-}
-
 .active-toggle-option {
     background: #eaeaea;
 }
@@ -76,11 +72,6 @@ body {
 
 .board-cell {
     border-right: solid 0.2rem black
-}
-
-.board-cell:hover {
-    background: #ffdbad;
-    cursor: pointer
 }
 
 .board-cell:active {
@@ -112,3 +103,13 @@ body {
     font-size: 20px;
 }
 
+@media not all and (hover: none) {
+    .mode-selector:hover {
+        background: rgba(220, 220, 220, 0.8);
+    }
+
+    .board-cell:hover {
+        background: #ffdbad;
+        cursor: pointer
+    }
+}
