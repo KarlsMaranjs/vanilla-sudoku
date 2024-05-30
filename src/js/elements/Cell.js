@@ -31,6 +31,24 @@ export default class Cell {
     rowIndex;
 
     /**
+     * @private
+     * @type {number}
+     */
+    _value;
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    _selected = false;
+
+    /**
+     * @type {Annotations}
+     * @private
+     */
+    _annotations;
+
+    /**
      * @type {number}
      */
     colIndex;
@@ -54,8 +72,9 @@ export default class Cell {
      * @param board {Board}
      * @param editable {boolean}
      * @param solution {number}
+     * @param annotations {number[]}
      */
-    constructor(cell, value = 0, rowIndex, colIndex, board, editable = true, solution = solution) {
+    constructor(cell, value = 0, rowIndex, colIndex, board, editable = true, solution, annotations = []) {
         this.DOMElement = cell;
         this._value = value;
         this.solution = solution;
@@ -66,7 +85,7 @@ export default class Cell {
         this._valueHolder = this.DOMElement.querySelector('div.board-cell-value')
         this._selected = false;
         this.editable = editable;
-        this._annotations = new Annotations(this);
+        this._annotations = new Annotations(this, annotations);
     }
 
     /**
@@ -84,10 +103,10 @@ export default class Cell {
             htmlContent = number;
             repeated = this.siblings.sameValue(number);
             this._valueHolder.classList.remove('annotations')
-            this._annotations.clear()
         } else {
-            htmlContent = annotations()
-            this._valueHolder.classList.add('annotations')
+            htmlContent = annotations();
+            this._valueHolder.classList.add('annotations');
+            this.annotations.clear();
         }
 
         if (repeated.length > 0) {
@@ -96,8 +115,7 @@ export default class Cell {
 
         this._valueHolder.innerHTML = htmlContent;
         this._value = newValue;
-
-        this.board.updateGrid(newValue, this.rowIndex, this.colIndex);
+        this._annotations.clear()
     }
 
     get value() {

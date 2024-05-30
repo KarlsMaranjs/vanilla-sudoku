@@ -11,8 +11,8 @@ export default class Annotations {
      * @param annotations {number[]}
      */
     constructor(cell, annotations = []) {
-        this._annotations = new Set(annotations);
         this.cell = cell;
+        this.annotations = annotations;
     }
 
     /**
@@ -23,12 +23,19 @@ export default class Annotations {
     }
 
     /**
+     * @param annotations {number[]}
+     */
+    set annotations(annotations) {
+        this._annotations = new Set(annotations);
+        this.updateDOM();
+    }
+
+    /**
      * @param number
      */
     add(number) {
         this._annotations.add(number);
-        const selector = this.cell.getAnnotationsHolder().querySelectorAll('div.annotation-square');
-        selector[number - 1].innerHTML = number
+        this.updateDOMElement(number, number)
     }
 
     /**
@@ -36,8 +43,7 @@ export default class Annotations {
      */
     remove(number) {
         this._annotations.delete(number);
-        const selector = this.cell.getAnnotationsHolder().querySelectorAll('div.annotation-square');
-        selector[number].innerHTML = EMPTY_CELL
+        this.updateDOMElement(number, EMPTY_CELL);
     }
 
     /**
@@ -50,8 +56,45 @@ export default class Annotations {
 
     clear() {
         this._annotations.clear();
-        const selector = this.cell.getAnnotationsHolder()?.querySelectorAll('div.annotation-square');
-        if (!selector) return
-        selector.forEach((element) => element.innerHTML = EMPTY_CELL);
+        this.updateDOM();
+    }
+
+    update(number) {
+        if (number > 0 && number < 10) {
+            this.has(number) ? this.remove(number) : this.add(number);
+        } else {
+            this.clear();
+        }
+    }
+
+    getValueHolders() {
+        if (!this.cell.getAnnotationsHolder()) return;
+        return this.cell.getAnnotationsHolder().querySelectorAll('div.annotation-square');
+    }
+
+    /**
+     * Updates a specific DOM element.
+     * @param index {number}
+     * @param content {number | string}
+     * @private
+     */
+    updateDOMElement(index, content) {
+        const htmlElements = this.getValueHolders();
+        if (!htmlElements) return;
+        htmlElements[index - 1].innerHTML = content;
+    }
+
+    /**
+     * Updates the DOM elements based on the current annotations.
+     * @private
+     */
+    updateDOM() {
+        const htmlElements = this.getValueHolders();
+        if (!htmlElements) return;
+
+        htmlElements.forEach((element, index) => {
+            const number = index + 1;
+            element.innerHTML = this.has(number) ? number : EMPTY_CELL;
+        });
     }
 }

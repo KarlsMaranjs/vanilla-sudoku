@@ -1,4 +1,5 @@
 import { ANNOTATE, PLAY } from "./constants.js";
+import { storage } from "./elements/Storage.js";
 
 /**
  * @param cell {Cell}
@@ -51,12 +52,10 @@ function updateCellValue(key, board) {
     if (board.mode === PLAY) {
         selectedCell.value = value;
     } else if (board.mode === ANNOTATE && selectedCell.value === 0) {
-        if (value > 0) {
-            selectedCell.annotations.add(value)
-        } else {
-            selectedCell.annotations.clear()
-        }
+        selectedCell.annotations.update(value);
     }
+
+    storage.board = board.grid;
 }
 
 /**

@@ -95,9 +95,13 @@ function sudoku() {
     //     [0, 5, 3, 1, 9, 0, 2, 0, 0]
     // ]
 
-    sudoku.innerHTML = printBoard(storage.grid.length > 0 ? storage.grid : grid);
+    let storedGrid = storage.initBoard(grid);
+    if (storage.board.length > 0) {
+        storedGrid = storage.board;
+    }
 
-    const board = new Board(sudoku, grid);
+    sudoku.innerHTML = printBoard(storage.toGrid(storedGrid));
+    const board = new Board(sudoku, storedGrid);
     const selectors = Array.from(document.getElementsByClassName('mode-selector'));
     const selected = selectors.find((selector) => selector.getAttribute('data-mode') === board.mode);
     selectMode(selected, selectors, board);

@@ -1,7 +1,7 @@
 import Cell from "./Cell.js";
 import Siblings from "./Siblings.js";
 import { storage } from "./Storage.js";
-import { ANNOTATE, PLAY } from "../constants.js";
+import { PLAY } from "../constants.js";
 
 export default class Board {
 
@@ -20,7 +20,7 @@ export default class Board {
     board;
 
     /**
-     * @type {number[][]}
+     * @type {Cell[][]}
      */
     grid;
 
@@ -36,11 +36,10 @@ export default class Board {
 
     /**
      * @param board {HTMLTableElement}
-     * @param grid {number[][]}
+     * @param grid {StoredCell[][]}
      */
     constructor(board, grid) {
         this.board = board;
-        this.grid = grid;
         this._activeCell = null;
         this.cells = [];
         this.mode = PLAY;
@@ -50,36 +49,27 @@ export default class Board {
     }
 
     /**
-     * @param grid {number[][]}
+     * @param grid {StoredCell[][]}
      * @return {Cell[]}
      */
     initCells(grid) {
         const rows = this.board.getElementsByTagName('tr');
-        Array.from(rows).map((row, rowIndex) => {
+        this.grid = Array.from(rows).map((row, rowIndex) => {
             const cells = row.getElementsByTagName('td');
             return Array.from(cells)
                 .map((cell, colIndex) => {
-                    let value = grid[rowIndex][colIndex];
-                    let editable = value === 0;
+                    const storedCell = grid[rowIndex][colIndex];
+                    let value = storedCell.value;
+                    let editable = storedCell.editable;
+                    let annotations = storedCell.annotations;
 
-                    if (storage.grid.length > 0) {
-                        value = storage.grid[rowIndex][colIndex];
-                        editable = storage.grid[rowIndex][colIndex] !== grid[rowIndex][colIndex] || value === 0
-                    }
-
-                    this.cells.push(new Cell(cell, value, rowIndex, colIndex, this, editable, value));
+                    const newCell = new Cell(cell, value, rowIndex, colIndex, this, editable, value, annotations);
+                    this.cells.push(newCell);
+                    return newCell;
                 });
         });
-    }
 
-    /**
-     * @param value
-     * @param row
-     * @param col
-     */
-    updateGrid(value, row, col) {
-        this.grid[row][col] = value;
-        storage.grid = this.grid;
+        storage.board = this.grid;
     }
 
     setSiblings(){
