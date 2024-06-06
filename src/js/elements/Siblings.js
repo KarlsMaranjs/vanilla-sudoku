@@ -131,7 +131,7 @@ export default class Siblings {
         return [];
     }
 
-    highlight(color){
+    highlight(color) {
         this.all.map((cell) => cell.highlight(color))
     }
 
@@ -149,5 +149,9 @@ export default class Siblings {
      */
     sameValue(number) {
         return this.all.filter((cell) => cell.value === number);
+    }
+
+    contains(number) {
+        return this.all.some(cell => cell.value === number);
     }
 }

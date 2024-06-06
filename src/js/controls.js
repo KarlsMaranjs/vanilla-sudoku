@@ -8,6 +8,10 @@ import { storage } from "./elements/Storage.js";
  */
 function selectCell(cell, board) {
     board.activeCell = !cell.selected ? cell : null;
+    if (board.activeCell) {
+        board.activeCell.annotations = board.activeCell.possibleValues();
+    }
+
     return cell;
 }
 
