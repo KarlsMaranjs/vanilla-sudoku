@@ -73,7 +73,7 @@ export default class Board {
     }
 
     setSiblings(){
-        this.cells.forEach((cell) => cell.siblings = new Siblings(this, cell.rowIndex, cell.colIndex));
+        this.cells.forEach((cell) => cell.siblings = new Siblings(this, cell));
     }
 
     /**

@@ -172,10 +172,36 @@ export default class Cell {
      * @return {number[]}
      */
     possibleValues() {
-        let values = [];
-        for (let number = 1; number < 10; number++) {
-            if (!this.siblings.contains(number)) values.push(number)
+        const siblingValues = this.siblings.values;
+        return Array.from({length: 9}, (_, i) => i + 1)
+            .filter(number => !siblingValues.has(number));
+    }
+
+    /**
+     * @return {number}
+     */
+    nakedSingle() {
+        const possibleValues = this.possibleValues();
+        return this.value === 0 && possibleValues.length === 1
+            ? possibleValues[0]
+            : 0
+    }
+
+    /**
+     * @return {number[]}
+     */
+    hiddenInRow() {
+        const possible = this.possibleValues();
+        const siblingPossibleValues = new Set();
+
+        for (const cell of this.siblings.row) {
+            if (cell.value !== 0) continue;
+
+            for (const val of cell.possibleValues()) {
+                siblingPossibleValues.add(val);
+            }
         }
-        return values;
+
+        return possible.filter(possible => !siblingPossibleValues.has(possible));
     }
 }
