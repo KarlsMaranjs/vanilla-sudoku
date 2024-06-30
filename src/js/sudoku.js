@@ -1,5 +1,5 @@
 import Board from "./elements/Board.js";
-import { initControls, selectMode } from "./controls.js";
+import { initControls, renderControls, selectMode } from "./controls.js";
 import { storage } from "./elements/Storage.js";
 import { EMPTY_CELL } from "./constants.js";
 
@@ -173,6 +173,7 @@ function sudoku() {
     selectMode(selected, selectors, board);
 
     initControls(board)
+    renderControls()
 }
 
 sudoku();

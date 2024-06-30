@@ -94,6 +94,18 @@ function validateNumericKey(key) {
     return NaN
 }
 
+export function renderControls() {
+    const controls = document.getElementById('controls');
+
+    for (let i = 1; i < 10; i++) {
+        const button = document.createElement('button');
+        button.className = 'button';
+        button.innerText = i.toString();
+        button.setAttribute('data-value', i.toString());
+        controls.append(button)
+    }
+}
+
 /**
  *
  * @param board {Board}
