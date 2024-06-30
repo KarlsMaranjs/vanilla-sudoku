@@ -43,7 +43,6 @@ body {
     flex-direction: row;
     justify-content: space-between;
     margin-top: 1rem;
-    padding: 0.25rem;
 }
 
 .mode-selector {
@@ -120,6 +119,8 @@ body {
     border: solid 0.1rem rgb(142, 141, 141);
     border-radius: 0.25rem;
     background: rgba(243, 219, 184, 0.53);
+    padding: 0;
+    color: #252525;
 }
 
 .hidden {
