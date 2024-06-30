@@ -119,8 +119,9 @@ body {
     border: solid 0.1rem rgb(142, 141, 141);
     border-radius: 0.25rem;
     background: rgba(243, 219, 184, 0.53);
-    padding: 0;
+    padding: 1rem 0;
     color: #252525;
+    text-align: center;
 }
 
 .hidden {
@@ -175,5 +176,6 @@ body {
     .button {
         width: 10%;
         font: 1.5rem Arial, Helvetica, sans-serif;
+        padding: 0.25rem 0;
     }
 }
