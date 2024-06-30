@@ -3,12 +3,12 @@ body {
     height: 100vh;
     display: flex;
     background: #f0f0e2;
-    overflow: hidden;
+    margin: 0;
 }
 
 #content-wrapper {
-    width: 54rem;
-    min-width: 54rem;
+    width: 100%;
+    max-width: 54rem;
     margin: auto;
 }
 
@@ -112,5 +112,33 @@ body {
     .board-cell:hover {
         background: #ffdbad;
         cursor: pointer
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    #content-wrapper {
+        width: 98%;
+        margin: auto;
+    }
+
+    #board {
+        font-size: 1.25rem;
+        border: solid 0.2rem black;
+    }
+
+    .board-row {
+        height: 2.5rem;
+    }
+
+    .annotation-square {
+        font-size: 0.55rem;
+    }
+
+    .board-row:nth-child(3n):not(:last-child) {
+        border-bottom: 0.2rem solid rgb(49, 49, 49);
+    }
+
+    .board-cell:nth-child(3n):not(:last-child) {
+        border-right: solid 0.2rem rgb(49, 49, 49)
     }
 }

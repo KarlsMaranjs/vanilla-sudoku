@@ -208,7 +208,7 @@ export default class Siblings {
         }
 
         const hiddenSingles = [];
-        for (const [value, cells] of possibleValuesMap.entries()) {
+        for (const [_, cells] of possibleValuesMap.entries()) {
             if (cells.length === 1) {
                 hiddenSingles.push(cells[0]);
             }
