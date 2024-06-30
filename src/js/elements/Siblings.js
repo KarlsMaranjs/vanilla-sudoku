@@ -12,6 +12,11 @@ export default class Siblings {
     board;
 
     /**
+     * @type {Cell}
+     */
+    parentCell;
+
+    /**
      * @type {number}
      */
     rowIndex;
@@ -54,32 +59,32 @@ export default class Siblings {
 
     /**
      * @param board {Board}
-     * @param rowIndex {number}
-     * @param colIndex {number}
+     * @param cell {Cell}
      */
-    constructor(board, rowIndex, colIndex) {
+    constructor(board, cell) {
         this.board = board;
-        this.rowIndex = rowIndex;
-        this.colIndex = colIndex;
-        this.row = this.rowSiblings();
-        this.column = this.colSiblings(board, rowIndex);
-        this.block = this.blockSiblings();
+        this.parentCell = cell;
+        this.rowIndex = cell.rowIndex;
+        this.colIndex = cell.colIndex;
+        this.row = this.#rowSiblings();
+        this.column = this.#colSiblings(board, this.rowIndex);
+        this.block = this.#blockSiblings();
 
         this.previous = {
-            row: this.row.find((cell) => cell.colIndex === colIndex - 1 && cell.rowIndex === this.rowIndex),
-            column: this.column.find((cell) => cell.rowIndex === rowIndex - 1 && cell.colIndex === this.colIndex)
+            row: this.row.find((cell) => cell.colIndex === this.colIndex - 1 && cell.rowIndex === this.rowIndex),
+            column: this.column.find((cell) => cell.rowIndex === this.rowIndex - 1 && cell.colIndex === this.colIndex)
         }
 
         this.next = {
-            row: this.row.find((cell) => cell.colIndex === colIndex + 1 && cell.rowIndex === this.rowIndex),
-            column: this.column.find((cell) => cell.rowIndex === rowIndex + 1 && cell.colIndex === this.colIndex)
+            row: this.row.find((cell) => cell.colIndex === this.colIndex + 1 && cell.rowIndex === this.rowIndex),
+            column: this.column.find((cell) => cell.rowIndex === this.rowIndex + 1 && cell.colIndex === this.colIndex)
         }
 
         this.all = this.row.concat(this.column).concat(this.block)
 
     }
 
-    blockSiblings() {
+    #blockSiblings() {
         const board = this.board;
         const blockSize = 3;
         const blockRow = Math.floor(this.rowIndex / blockSize) * blockSize;
@@ -97,16 +102,16 @@ export default class Siblings {
         return siblings;
     }
 
-    colSiblings() {
-        return this.findColSiblings(this.board, this.rowIndex, true)
+    #colSiblings() {
+        return this.#findColSiblings(this.board, this.rowIndex, true)
             .reverse()
-            .concat(this.findColSiblings(this.board, this.rowIndex))
+            .concat(this.#findColSiblings(this.board, this.rowIndex))
     }
 
     /**
      * @return {Cell[]}
      */
-    rowSiblings() {
+    #rowSiblings() {
         return this.board.cells.filter((cell) => cell.rowIndex === this.rowIndex && cell.colIndex !== this.colIndex);
     }
 
@@ -115,7 +120,7 @@ export default class Siblings {
      * @param rowIndex {number}
      * @param backwards {boolean}
      */
-    findColSiblings(board, rowIndex, backwards = false) {
+    #findColSiblings(board, rowIndex, backwards = false) {
         const nextIndex = backwards ? rowIndex - 1 : rowIndex + 1;
 
         if ((backwards && nextIndex >= 0) || (!backwards && nextIndex < 9)) {
@@ -125,13 +130,13 @@ export default class Siblings {
 
             if (!columnSibling) return [];
 
-            return [columnSibling].concat(this.findColSiblings(board, nextIndex, backwards));
+            return [columnSibling].concat(this.#findColSiblings(board, nextIndex, backwards));
         }
 
         return [];
     }
 
-    highlight(color){
+    highlight(color) {
         this.all.map((cell) => cell.highlight(color))
     }
 
@@ -149,5 +154,70 @@ export default class Siblings {
      */
     sameValue(number) {
         return this.all.filter((cell) => cell.value === number);
+    }
+
+    get values() {
+        return new Set(this.all.map(sibling => sibling.value));
+    }
+
+    get hidden() {
+        return this.hiddenInRow.concat(this.hiddenInCol).concat(this.hiddenInBlock);
+    }
+
+    get hiddenInRow() {
+        return this.#findHiddenSingle(this.row)
+    }
+
+    get hiddenInCol() {
+        return this.#findHiddenSingle(this.column)
+    }
+
+    get hiddenInBlock() {
+        return this.#findHiddenSingle(this.block)
+    }
+
+    get naked() {
+        return this.nakedInRow.concat(this.nakedInCol).concat(this.nakedInBlock);
+    }
+
+    get nakedInRow() {
+        return this.#findNakedSingle(this.row)
+    }
+
+    get nakedInCol() {
+        return this.#findNakedSingle(this.column)
+    }
+
+    get nakedInBlock() {
+        return this.#findNakedSingle(this.block)
+    }
+
+    #findHiddenSingle(cells) {
+        const possibleValuesMap = new Map();
+        const allCells = [...cells, this.parentCell];
+
+        for (const cell of allCells) {
+            if (cell.value !== 0) continue;
+
+            for (const value of cell.possibleValues()) {
+                if (!possibleValuesMap.has(value)) {
+                    possibleValuesMap.set(value, []);
+                }
+                possibleValuesMap.get(value).push(cell);
+            }
+        }
+
+        const hiddenSingles = [];
+        for (const [_, cells] of possibleValuesMap.entries()) {
+            if (cells.length === 1) {
+                hiddenSingles.push(cells[0]);
+            }
+        }
+
+        return hiddenSingles;
+    }
+
+    #findNakedSingle(cells) {
+        return [...cells, this.parentCell].filter((cell) => cell.possibleValues().length === 1 && cell.value === 0 && !cell.possibleValues().includes(0));
     }
 }

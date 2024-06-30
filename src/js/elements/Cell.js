@@ -85,7 +85,7 @@ export default class Cell {
         this._valueHolder = this.DOMElement.querySelector('div.board-cell-value')
         this._selected = false;
         this.editable = editable;
-        this._annotations = new Annotations(this, annotations);
+        this.annotations = annotations;
     }
 
     /**
@@ -126,7 +126,7 @@ export default class Cell {
      * @param selected {boolean}
      */
     set selected(selected) {
-        if (selected){
+        if (selected) {
             this.DOMElement.classList.add(SELECTED_CELL_CLASS)
             this.siblings.highlight('rgb(228,210,185)')
         } else {
@@ -156,11 +156,52 @@ export default class Cell {
         return this._annotations;
     }
 
+    set annotations(annotations) {
+        this._annotations = new Annotations(this, annotations);
+    }
+
     getAnnotationsHolder() {
         return this.DOMElement.querySelector('div.annotations')
     }
 
     highlight(color) {
         this.DOMElement.style.background = color
+    }
+
+    /**
+     * @return {number[]}
+     */
+    possibleValues() {
+        const siblingValues = this.siblings.values;
+        return Array.from({length: 9}, (_, i) => i + 1)
+            .filter(number => !siblingValues.has(number));
+    }
+
+    /**
+     * @return {number}
+     */
+    nakedSingle() {
+        const possibleValues = this.possibleValues();
+        return this.value === 0 && possibleValues.length === 1
+            ? possibleValues[0]
+            : 0
+    }
+
+    /**
+     * @return {number[]}
+     */
+    hiddenInRow() {
+        const possible = this.possibleValues();
+        const siblingPossibleValues = new Set();
+
+        for (const cell of this.siblings.row) {
+            if (cell.value !== 0) continue;
+
+            for (const val of cell.possibleValues()) {
+                siblingPossibleValues.add(val);
+            }
+        }
+
+        return possible.filter(possible => !siblingPossibleValues.has(possible));
     }
 }

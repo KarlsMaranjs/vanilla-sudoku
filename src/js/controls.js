@@ -8,6 +8,19 @@ import { storage } from "./elements/Storage.js";
  */
 function selectCell(cell, board) {
     board.activeCell = !cell.selected ? cell : null;
+    if (board.activeCell) {
+        board.activeCell.annotations = board.activeCell.possibleValues();
+        // cell.siblings.hiddenInCol.map((cell) => cell.highlight('green'))
+        // cell.siblings.hiddenInRow.map((cell) => cell.highlight('blue'))
+        // cell.siblings.hiddenInBlock.map((cell) => cell.highlight('pink'))
+        cell.siblings.hidden.map((cell) => cell.highlight('blue'))
+        cell.siblings.naked.map((cell) => cell.highlight('yellow'))
+
+        // cell.siblings.nakedInRow.map((cell) => cell.highlight('yellow'))
+        // cell.siblings.nakedInCol.map((cell) => cell.highlight('yellow'))
+        // cell.siblings.nakedInBlock.map((cell) => cell.highlight('yellow'))
+    }
+
     return cell;
 }
 
