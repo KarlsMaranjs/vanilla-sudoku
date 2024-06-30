@@ -1,4 +1,5 @@
 import { ANNOTATE, PLAY } from "./constants.js";
+import Button from "./elements/Button.js";
 import { storage } from "./elements/Storage.js";
 
 /**
@@ -9,6 +10,7 @@ import { storage } from "./elements/Storage.js";
 function selectCell(cell, board) {
     board.activeCell = !cell.selected ? cell : null;
     if (board.activeCell) {
+        document.getElementById('controls').classList.remove('hidden');
         board.activeCell.annotations = board.activeCell.possibleValues();
         // cell.siblings.hiddenInCol.map((cell) => cell.highlight('green'))
         // cell.siblings.hiddenInRow.map((cell) => cell.highlight('blue'))
@@ -19,6 +21,8 @@ function selectCell(cell, board) {
         // cell.siblings.nakedInRow.map((cell) => cell.highlight('yellow'))
         // cell.siblings.nakedInCol.map((cell) => cell.highlight('yellow'))
         // cell.siblings.nakedInBlock.map((cell) => cell.highlight('yellow'))
+    } else {
+        document.getElementById('controls').classList.add('hidden');
     }
 
     return cell;
@@ -28,7 +32,7 @@ function selectCell(cell, board) {
  * @param key {string}
  * @param board {Board}
  */
-function updateCellValue(key, board) {
+export function updateCellValue(key, board) {
 
     const selectedCell = board.activeCell;
     if (!selectedCell) return
@@ -94,7 +98,7 @@ function validateNumericKey(key) {
     return NaN
 }
 
-export function renderControls() {
+export function renderControls(board) {
     const controls = document.getElementById('controls');
 
     for (let i = 1; i < 10; i++) {
@@ -102,6 +106,7 @@ export function renderControls() {
         button.className = 'button';
         button.innerText = i.toString();
         button.setAttribute('data-value', i.toString());
+        new Button(button, i, board)
         controls.append(button)
     }
 }

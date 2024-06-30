@@ -122,6 +122,10 @@ body {
     background: rgba(243, 219, 184, 0.53);
 }
 
+.hidden {
+    opacity: 0 !important;
+}
+
 @media not all and (hover: none) {
     .mode-selector:hover {
         background: rgba(220, 220, 220, 0.8);

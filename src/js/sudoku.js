@@ -173,7 +173,7 @@ function sudoku() {
     selectMode(selected, selectors, board);
 
     initControls(board)
-    renderControls()
+    renderControls(board)
 }
 
 sudoku();
