@@ -124,6 +124,7 @@ body {
 
 .hidden {
     opacity: 0 !important;
+    transition: opacity 0.2s ease-in-out;
 }
 
 @media not all and (hover: none) {
